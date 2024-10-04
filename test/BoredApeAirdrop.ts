@@ -40,10 +40,11 @@ describe("MerkleAirdrop", function () {
   }
 
   it("Should deploy the contract with correct ERC20 token and Merkle root", async function () {
-    const { token, airdrop, merkleTree} = await loadFixture(deployFixture);
+    const { token, airdrop, merkleTree, owner} = await loadFixture(deployFixture);
 
     expect(await airdrop.token()).to.equal(await token.getAddress());
     expect(await airdrop.merkleRoot()).to.equal(merkleTree.root);
+    expect(await airdrop.owner()).to.be.equal(owner)
   });
 
   it("Should allow valid claims", async function () {
@@ -54,7 +55,7 @@ describe("MerkleAirdrop", function () {
 
     await owner.sendTransaction({
       to: impersonatedSigner,
-      value: ethers.parseEther("1.0")  // Send 1 ETH
+      value: ethers.parseEther("1.0")  
     });
 
     const leaf = [addr1, ethers.parseEther("100")];
